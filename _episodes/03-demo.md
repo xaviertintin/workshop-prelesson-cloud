@@ -122,4 +122,4 @@ Once the cluster is ready (green check-mark should appear)
 ![](../fig/Picture1.png)
 
 * Execute that command in the cloud shell:
-![](../fig/Picture2.png)
+![](../fig/test.png)
