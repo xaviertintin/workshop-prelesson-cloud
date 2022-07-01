@@ -22,7 +22,7 @@ Install it into your working environment with the following commands
 
 ```bash
 kubectl create ns argo
-kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo-workflows/master/manifests/quick-start-postgres.yaml`
+kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo-workflows/master/manifests/quick-start-postgres.yaml
 curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
 gunzip argo-linux-amd64.gz
 chmod +x argo-linux-amd64
@@ -108,3 +108,133 @@ argo delete -n argo @latest
 > {: .bash}
 >
 {: .testimonial}
+
+
+
+## Storage volumes
+
+If we run some application or workflow, we usually require a disk space where to dump our results.  There is no persistent disk by default, we have to create it.
+
+You could create a disk clicking on the web interface above, but lets do it faster in the command line.
+
+Create the volume (disk) we are going to use
+
+```
+gcloud compute disks create --size=100GB --zone=us-central1-c gce-nfs-disk-1
+```
+
+Set up an nfs server for this disk:
+
+```
+wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/001-nfs-server.yaml
+kubectl apply -n argo -f 001-nfs-server.yaml
+```
+
+Set up a nfs service, so we can access the server:
+
+```
+wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/002-nfs-server-service.yaml
+kubectl apply -n argo -f 002-nfs-server-service.yaml
+```
+
+Let's find out the IP of the nfs server:
+
+```
+kubectl get -n argo svc nfs-server |grep ClusterIP | awk '{ print $3; }'
+```
+
+Let's create a *persisten volume* out of this nfs disk.  Note that persisten volumes are not namespaced they are available to the whole cluster.
+
+We need to write that IP number above into the appropriate place in this file:
+
+```
+wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/003-pv.yaml
+```
+
+~~~
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-1
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: <Add IP here>
+    path: "/"
+~~~
+{: .language-yaml}
+
+Deploy:
+
+```
+kubectl apply -f 003-pv.yaml
+```
+
+Check:
+
+```
+kubectl get pv
+```
+
+Apps can claim persistent volumes through *persistent volume claims* (pvc).  Let's create a pvc:
+
+```
+wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/003-pvc.yaml
+kubectl apply -n argo -f 003-pvc.yaml
+```
+Check:
+
+```
+kubectl get pvc -n argo
+```
+
+Now an argo workflow coul claim and access this volume with a configuration like:
+
+~~~
+# argo-wf-volume.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: test-hostpath-
+spec:
+  entrypoint: test-hostpath
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+        claimName: nfs-<NUMBER>
+  templates:
+  - name: test-hostpath
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        echo "This is the ouput" > /mnt/vol/test.txt
+        echo ls -l /mnt/vol: `ls -l /mnt/vol`
+      volumeMounts:
+      - name: task-pv-storage
+        mountPath: /mnt/vol
+~~~
+{: .language-yaml}
+
+Submit and check this workflow with
+
+```bash
+argo submit -n argo argo-wf-volume.yaml
+argo list -n argo
+```
+
+Take the name of the workflow from the output (replace XXXXX in the following command)
+and check the logs:
+
+```bash
+kubectl logs pod/test-hostpath-XXXXX  -n argo main
+```
+
+Once the job is done, you will see something like:
+
+```output
+ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
+```
