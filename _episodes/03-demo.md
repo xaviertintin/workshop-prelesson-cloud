@@ -16,56 +16,6 @@ keypoints:
 
 In this demonstration we will show you the very basic way in which you can create a computer cluster (a Kubernetes cluster to be exact) in the cloud so you can do some data processing and analysis using those resources.  In the process we will make sure you learn about the jargon.  During the hands-on session tomorrow, a cluster similar to this one will be provided to you for the exercises.  
 
-## Basic concepts
-
-### The Google Cloud Platform (GCP)
-
-A place on the web that interfaces the user with all the different services that google provide on the *cloud*.
-
-![](https://www.seekpng.com/png/full/357-3579104_what-is-google-cloud-platform-google-cloud-platform.png)
-
-{% include links.md %}
-
-### GCP Console
-
-The exact name of the GCP interface where you can explore all the different services that GCP provides.  They include, but are not limited to individual virtual machines, disk storage, kubernetes clusters, etc.
-
-![](https://cloudmaven.github.io/cloud101_cloudproviders/fig/03-gcp-intro-0001.png)
-
-### Google Kubernetes Engine
-
-A Google service to create Kubernetes clusters and run conteinerized application and/or jobs/workflows.
-
-### Kubernetes (K8s)
-
-Software which orchestrates containers in a computer cluster.  You already had a chance to learn about its architecture.
-
-![](https://1.bp.blogspot.com/-kCijQkEkmA8/X9ctU83lcJI/AAAAAAAAF5U/GayBI9yQ-PsUuGI9L4Mf8dJwsByp6g8WQCLcBGAsYHQ/s1192/k8%2Barchitecture.PNG)
-
-
-### Workflow
-
-A series of sequential operations in order to achieve a final result.  In our case it could be, for instance
-
-`skimming` -> `merging output files` -> `EventLoop analysis of resulting files` -> `Plottin histograms`
-
-In the context of the cloud, they are written in `yaml` files.
-
-### Pod
-
-The smallest abstraction layer in a K8s cluter.  For any practical purposes, a pod is an abstraction of a container running in the K8s cluster.
-
-![](https://res.cloudinary.com/escalante-rep/image/upload/v1589159144/i14yfj2jn5nm70bzekxu.jpg)
-
-### Deployment
-
-This is an abstraction layer which is above *pods*.  In practice, you always create deployments in K8s, not pods.
-
-### Argo
-
-Argo Workflows is an open source container-native workflow engine for orchestrating parallel jobs on Kubernetes.
-
-![](https://argoproj.github.io/argo-workflows/assets/argo.png)
 
 
 ## Creating your own cluster on GKE
