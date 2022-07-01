@@ -12,17 +12,93 @@ keypoints:
 - "It takes just a few clicks to create you own K8s cluster"
 ---
 
-## Introduction
+## Install argo as a workflow engine
 
-In this demonstration we will show you the very basic way in which you can create a computer cluster (a Kubernetes cluster to be exact) in the cloud so you can do some data processing and analysis using those resources.  In the process we will make sure you learn about the jargon.  During the hands-on session tomorrow, a cluster similar to this one will be provided to you for the exercises.  
+While jobs can also be run manually, a workflow engine makes defining and
+submitting jobs easier. In this tutorial, we use
+[argo](https://argoproj.github.io/argo/quick-start/).
+Install it into your working environment with the following commands
+(all commands to be entered into the cloud shell):
 
-## Creating your own cluster on GKE
+```bash
+kubectl create ns argo
+kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/quick-start-postgres.yaml
+curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
+gunzip argo-linux-amd64.gz
+chmod +x argo-linux-amd64
+sudo mv ./argo-linux-amd64 /usr/local/bin/argo
+```
 
-For the hands-on part of this lesson you will not have to create the cluster for yourself, it will be already done for you.  For pedagogical reasons, however, we will show an example of how to do it by hand.  The settings below should be good and cheap enough for CMSSW-related workflows.
+This will also install the argo binary, which makes managing the workflows
+easier.
 
-* Get to the Console
-* Create a new project or select one of your interest (if you already have one)
+> ## Reconnecting after longer time away
+>
+> In case you leave your computer, you might have to reconnect to the CloudShell
+> again, and also on a different computer. If the `argo` command is not found,
+> run the command above again starting from the `curl` command.
+>
+{: .callout}
 
-While we wait, lets inspect the Cloud shell...
+You need to execute the following command so that the argo workflow controller
+has sufficient rights to manage the workflow pods.
+Replace `XXX` with the number for the login credentials you received.
 
+```bash
+kubectl create clusterrolebinding cern-cms-cluster-admin-binding --clusterrole=cluster-admin --user=cms-gXXX@arkivum.com
+```
 
+You can now check that argo is available with
+
+```bash
+argo version
+```
+
+We need to apply a small patch to the default argo config. Create a file called
+`patch-workflow-controller-configmap.yaml`:
+
+```yaml
+data:
+  artifactRepository: |
+    archiveLogs: false
+```
+
+Apply:
+
+```shell
+kubectl patch configmap workflow-controller-configmap -n argo --patch "$(cat patch-workflow-controller-configmap.yaml)"
+```
+
+## Run a simple test workflow
+
+To test the setup, run a simple test workflow with
+
+```bash
+argo submit -n argo --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
+argo list -n argo
+argo get -n argo @latest
+argo logs -n argo @latest
+argo delete -n argo @latest
+```
+
+Please mind that it is important to delete your workflows once they have
+completed. If you do not do this, the pods associated with the workflow
+will remain scheduled in the cluster, which might lead to additional charges.
+You will learn how to automatically remove them later.
+
+> ## Kubernetes namespaces
+>
+> The above commands as well as most of the following use a flag `-n argo`,
+> which defines the namespace in which the resources are queried or created.
+> [Namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)
+> separate resources in the cluster, effectively giving you multiple virtual
+> clusters within a cluster.
+>
+> You can change the default namespace to `argo` as follows:
+>
+> ~~~
+> kubectl config set-context --current --namespace=argo
+> ~~~
+> {: .bash}
+>
+{: .testimonial}
