@@ -356,7 +356,7 @@ kubectl get svc -n argo
 You will initially see a line like this:
 
 ```output
-NAME                          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+NAME                          TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
 http-fileserver               LoadBalancer   10.8.7.24    <pending>     80:30539/TCP   5s
 ```
 ![](../fig/helloNFS.png)
