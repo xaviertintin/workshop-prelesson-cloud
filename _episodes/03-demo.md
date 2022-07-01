@@ -48,17 +48,6 @@ While we wait, lets inspect the Cloud shell...
 
 GCP provides an *access machine* so you can interact with their different services, including our newly created K8s cluster.  This machine (and the terminal) is not really part of the cluster. As was said, it is an entry point.  From here you could *connect* to your cluster.
 
-![](https://cloud.google.com/shell/docs/images/cloud-shell-gcloud.gif)
-
-* Get verified for login, type:
-```
-gcloud auth login
-```
-Then follow the proceure for the verification.
-![](../fig/auth.png)
-
-This is something you will have to do only once.  For the hands-on part of the lesson, it is likely that you were already authenticated.
-
 ## The `gcloud` command
 
 The gcloud command-line interface is the primary CLI tool to create and manage Google Cloud resources. You can use this tool to perform many common platform tasks either from the command line or in scripts and other automations.
@@ -68,7 +57,16 @@ The gcloud command-line interface is the primary CLI tool to create and manage G
 Once the cluster is ready (green check-mark should appear)
 
 * Click on the connect button of your cluster:
-![](../fig/Picture1.png)
+![](../fig/connection.png)
 
 * Execute that command in the cloud shell:
-![](../fig/test.png)
+![](../fig/commandline.png)
+
+* You’ve connected to your shell, now press enter to link to your GKE cluster:
+![](../fig/load.png)
+
+* Authorize Shell
+![](../fig/someCredentials.png)
+
+
+
