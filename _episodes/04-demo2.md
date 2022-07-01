@@ -1,5 +1,5 @@
 ---
-title: "Demo: Creating a cluster"
+title: "Demo: Running other things"
 teaching: 20
 exercises: 0
 questions:
