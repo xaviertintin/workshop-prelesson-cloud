@@ -1,7 +1,7 @@
 ---
 title: "Demo: Creating a cluster"
 teaching: 20
-exercises: 0
+exercises: 20
 questions:
 - "What are the basic concepts and jargon I need to know?"
 - "Do do I manually create a K8s cluster on the GCP"
