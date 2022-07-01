@@ -93,10 +93,14 @@ kubectl get svc -n argo
 
 You will initially see a line like this:
 
-```output
+~~~
 NAME                          TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
 http-fileserver               LoadBalancer   10.8.7.24    <pending>     80:30539/TCP   5s
-```
+~~~
+{: .output}
+
+Wait a couple minutes recheck the previous command, copy your EXTERNAL-IP and paste it on a new tab, it should look something like this:
+
 ![](../fig/helloNFS.png)
 
 The `<pending>` `EXTERNAL-IP` will update after a few minutes (run the command
@@ -127,5 +131,36 @@ kubectl exec http-fileserver-XXXXXXXX-YYYYY -n argo -- rm /usr/share/nginx/html/
 > Run the `kubectl expose deployment` command to expose it again.
 >
 {: .testimonial}
+
+## Argo GUI
+
+Check the services running and the associated IP addresses:
+```shell
+kubectl get svc -n argo
+kubectl -n argo port-forward deployment/argo-server 2746:2746
+```
+It will start fowarding port, to not inturrupt this open a new window, after a couple minutes it will be handling connection.
+Open in new terminal window and run: 
+
+```shell
+lynx https://localhost:2746
+```
+
+This will permit that the port is accessed, finally patch the service with:
+
+```shell
+kubectl patch svc argo-server -n argo -p '{"spec": {"type": "LoadBalancer"}}'
+```
+
+Since it is creating an external ip, wait a couple minutes. You can check if it is ready with:
+
+```shell
+kubectl get svc -n argo
+```
+
+* Finally, you can access this address in your localhost. Do not forget to add “https://” and “:2746”
+* Click on Advanced, proceed to <ip>(unsafe) and voilà
+  
+![](../fig/argoInterface.png)
 
 {% include links.md %}
