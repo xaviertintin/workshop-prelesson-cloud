@@ -303,7 +303,7 @@ Open this file and again adjust the `<NUMBER>`:
 
 ```yaml
 # deployment-http-fileserver.yaml
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -359,6 +359,7 @@ You will initially see a line like this:
 NAME                          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
 http-fileserver               LoadBalancer   10.8.7.24    <pending>     80:30539/TCP   5s
 ```
+![](../fig/helloNFS.png)
 
 The `<pending>` `EXTERNAL-IP` will update after a few minutes (run the command
 again to check). Once it's there, copy the IP and paste it into a new browser
@@ -366,6 +367,8 @@ tab. This should welcome you with a "Hello from NFS" message. In order to
 enable file browsing, we need to delete the `index.html` file in the pod.
 Determine the pod name using the first command listed below and adjust the
 second command accordingly.
+
+![](../fig/index.png)
 
 ```shell
 kubectl get pods -n argo
@@ -386,11 +389,5 @@ kubectl exec http-fileserver-XXXXXXXX-YYYYY -n argo -- rm /usr/share/nginx/html/
 > Run the `kubectl expose deployment` command to expose it again.
 >
 {: .testimonial}
-
-Remember to delete your workflow again to avoid additional charges.
-
-```shell
-argo delete -n argo @latest
-```
 
 {% include links.md %}
