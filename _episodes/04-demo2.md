@@ -22,7 +22,7 @@ Install it into your working environment with the following commands
 
 ```bash
 kubectl create ns argo
-kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/quick-start-postgres.yaml
+kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo-workflows/master/manifests/quick-start-postgres.yaml`
 curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
 gunzip argo-linux-amd64.gz
 chmod +x argo-linux-amd64
@@ -78,13 +78,19 @@ argo submit -n argo --watch https://raw.githubusercontent.com/argoproj/argo/mast
 argo list -n argo
 argo get -n argo @latest
 argo logs -n argo @latest
-argo delete -n argo @latest
 ```
+* Wait till the yellow light turns green
+* If argo was installed correctly you will have the following:
+![](../fig/helloWorld.png)
 
 Please mind that it is important to delete your workflows once they have
 completed. If you do not do this, the pods associated with the workflow
 will remain scheduled in the cluster, which might lead to additional charges.
 You will learn how to automatically remove them later.
+
+```bash
+argo delete -n argo @latest
+```
 
 > ## Kubernetes namespaces
 >
