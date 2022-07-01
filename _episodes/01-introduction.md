@@ -27,7 +27,7 @@ Now, if you had more machines available, let's say 3 or 4, and in each one of th
 ## Kubernetes (K8s)
 A Kubernetes cluster consists of "master" nodes and "worker" nodes. In short, master nodes share state to manage the cluster and schedule jobs to run on workers. It is considered best practice to run an odd number of masters.
 
-# Kubernetes Components
+### Kubernetes Components
 When you deploy Kubernetes, you get a cluster. A Kubernetes cluster consists of a set of worker machines, called nodes. The worker nodes host the Pods that are the components of the application workload.
 
 * Masters
@@ -38,7 +38,7 @@ While master nodes are constantly sharing data, managing the control plane (rout
 
 ![](https://1.bp.blogspot.com/-kCijQkEkmA8/X9ctU83lcJI/AAAAAAAAF5U/GayBI9yQ-PsUuGI9L4Mf8dJwsByp6g8WQCLcBGAsYHQ/s1192/k8%2Barchitecture.PNG)
 
-# Nodes Components
+### Nodes Components
 * Pods 
 In the Kubernetes world, pods are the smallest computing unit. A pod is made up of one or more containers. While pods are essential for understanding Kubernetes, when writing services we don't actually deal in pods but one further abstraction, deployments, which create pods for us|
 * Kubelet 
@@ -48,6 +48,6 @@ It reflects the services defined in the cluster and manages the rules to load-ba
 
 ![](https://res.cloudinary.com/escalante-rep/image/upload/v1589159144/i14yfj2jn5nm70bzekxu.jpg)
 
-## Autoscaling
+### Autoscaling
 Kubernetes supports autoscaling to optimise your nodes’ resources as wll as adjust CPU and memory to meet your application’s real usage. When you need to save some money, you can scale down. Probably you want to pay for what you use, keep only with the resources when you need them
 If you want to learn about pricing, ckeck the next link: [Google-cloud](https://cloud.google.com/compute/all-pricing)
