@@ -75,7 +75,7 @@ Once the cluster is ready (green check-mark should appear)
 
 * Authorize Shell
 ![](../fig/someCredentials.png)
-![](../fig/SomeCredentials.png)
+![](../fig/SomeCredentials.PNG)
 
 
 
