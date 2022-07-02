@@ -23,7 +23,7 @@ For the hands-on part of this lesson you will not have to create the cluster for
 * Get to the Console
 * Create a new project or select one of your interest (if you already have one)
 * Click on the Kubernetes engine/clusters section on the left side menu
-![](../fig/selectCluster.png)
+// ![](../fig/selectCluster.png)
 ![](../fig/SelectCluster.PNG)
 * Select create cluster (standard)
 ![](../fig/selectCreate.png)
