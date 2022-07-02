@@ -235,9 +235,10 @@ kubectl logs pod/test-hostpath-XXXXX  -n argo main
 
 Once the job is done, you will see something like:
 
-```output
+~~~
 ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
-```
+~~~
+{: .output}
 
 ## Get the output file
 
