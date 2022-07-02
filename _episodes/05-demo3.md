@@ -23,7 +23,7 @@ the outside world is to deploy a webserver that mounts the storage volume.
 
 We first patch the config of the webserver to be created as follows:
 
-```shell
+```bash
 mkdir conf.d
 cd conf.d
 curl -sLO https://raw.githubusercontent.com/cms-opendata-workshop/workshop-payload-kubernetes/master/conf.d/nginx-basic.conf
@@ -33,7 +33,7 @@ kubectl create configmap basic-config --from-file=conf.d -n argo
 
 Then prepare to deploy the fileserver by downloading the manifest:
 
-```shell
+```bash
 curl -sLO https://github.com/cms-opendata-workshop/workshop-payload-kubernetes/raw/master/deployment-http-fileserver.yaml
 ```
 
@@ -79,7 +79,7 @@ spec:
 
 Apply and expose the port as a `LoadBalancer`:
 
-```shell
+```bash
 kubectl create -n argo -f deployment-http-fileserver.yaml
 kubectl expose deployment http-fileserver -n argo --type LoadBalancer --port 80 --target-port 80
 ```
@@ -87,7 +87,7 @@ kubectl expose deployment http-fileserver -n argo --type LoadBalancer --port 80 
 Exposing the deployment will take a few minutes. Run the following command to
 follow its status:
 
-```shell
+```bash
 kubectl get svc -n argo
 ```
 
@@ -112,7 +112,7 @@ second command accordingly.
 
 ![](../fig/index.png)
 
-```shell
+```bash
 kubectl get pods -n argo
 kubectl exec http-fileserver-XXXXXXXX-YYYYY -n argo -- rm /usr/share/nginx/html/index.html
 ```
@@ -123,10 +123,9 @@ kubectl exec http-fileserver-XXXXXXXX-YYYYY -n argo -- rm /usr/share/nginx/html/
 > your files (mind: there are charges for outgoing bandwidth). Please delete
 > the service again once you have finished downloading your files.
 >
-> ~~~
+> ```bash
 > kubectl delete svc/http-fileserver -n argo
-> ~~~
-> {: .bash}
+> ```
 >
 > Run the `kubectl expose deployment` command to expose it again.
 >
@@ -135,26 +134,26 @@ kubectl exec http-fileserver-XXXXXXXX-YYYYY -n argo -- rm /usr/share/nginx/html/
 ## Argo GUI
 
 Check the services running and the associated IP addresses:
-```shell
+```bash
 kubectl get svc -n argo
 kubectl -n argo port-forward deployment/argo-server 2746:2746
 ```
 It will start fowarding port, to not inturrupt this open a new window, after a couple minutes it will be handling connection.
 Open in new terminal window and run: 
 
-```shell
+```bash
 lynx https://localhost:2746
 ```
 
 This will permit that the port is accessed, finally patch the service with:
 
-```shell
+```bash
 kubectl patch svc argo-server -n argo -p '{"spec": {"type": "LoadBalancer"}}'
 ```
 
 Since it is creating an external ip, wait a couple minutes. You can check if it is ready with:
 
-```shell
+```bash
 kubectl get svc -n argo
 ```
 
