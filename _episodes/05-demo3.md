@@ -1,15 +1,15 @@
 ---
-title: "Demo: External IP"
-teaching: 0
-exercises: 10
+title: "Demo: Deploy a Webserver"
+teaching: 5
+exercises: 20
 questions:
-- "What are the basic concepts and jargon I need to know?"
-- "Do do I manually create a K8s cluster on the GCP"
+- "How can I visualize my workflows?"
+- "How do I deploy my Argo GUI?"
 objectives:
-- "Learn a few words and concepts that will be used during this lesson"
-- "Lear how to create a K8s cluster from scratch"
+- "Prepare to deploy the fileserver that mounts the storage volume."
+- "Submit your workflow and get the results."
 keypoints:
-- "It takes just a few clicks to create you own K8s cluster"
+- "With a simple but a tight yaml structure, a full-blown analysis can be performed using the Argo tool on a K8s cluster."
 ---
 
 
