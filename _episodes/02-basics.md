@@ -1,22 +1,19 @@
 ---
 title: "Getting started with Argo and Kubectl"
-teaching: 15
-exercises: 15
+teaching: 10
+exercises: 10
 questions:
-- "How to setup a workflow engine to submit jobs?"
 - "How to use Kubectl commands?"
 - "What is kubectl?"
 - "What is Argo workflows?"
-- "What kind of services/resources will I need to instantiate in my cluster?"
 
 objectives:
-- "Understand how to run a simple workflows in a commercial cloud environment"
 - "Lear what the kubectl command can do"
 - "Appreciate the necessity for the Argo workflows tool (or similar)"
 - "Lear how to set up different services/resources to get the most of your cluster"
 
 keypoints:
-- "kubectl is the ruler of GKE"
+- "`kubectl` is the ruler of GKE"
 - "Argo is a very useful tool for running workflows and parallel jobs"
 - "To be able to write, read and extract data, a few services/resources need to be set up on the GCP"
 ---
