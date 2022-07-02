@@ -25,7 +25,7 @@ keypoints:
 Kubernetes provides a kubectl for communicating with a Kubernetes cluster's control plane, using the Kubernetes API.
 Use the following syntax to run kubectl commands from your terminal window:
 
-```shell
+```bash
 kubectl [command] [TYPE] [NAME] [flags]
 ```
 
@@ -73,7 +73,7 @@ We don't have much going on.  Let's create some components.
 
 * Inspect the `create` operation
 
-```
+```bash
 kubectl create -h
 ```
 
@@ -81,7 +81,7 @@ Note there is no `pod` on the list, so in K8s you don't create pods but *deploym
 
 * Let's create an application, it does not matter which.  Let's go for `nginx`:
 
-```
+```bash
 kubectl create deployment mynginx-depl --image=nginx
 ```
 
@@ -90,13 +90,13 @@ This is the most minimalist way of creating a deployment.
 
 * Check the deployments
 
-```
+```bash
 kubectl get deployment
 ```
 
 * Check pods
 
-```
+```bash
 kubectl get pod
 ```
 
