@@ -62,7 +62,7 @@ data:
   artifactRepository: |
     archiveLogs: false
 ~~~
-{: .code}
+{: .language-yaml}
 
 Apply:
 
@@ -165,7 +165,7 @@ spec:
     server: <Add IP here>
     path: "/"
 ~~~
-{: .code}
+{: .language-yaml}
 
 Deploy:
 
@@ -217,7 +217,7 @@ spec:
       - name: task-pv-storage
         mountPath: /mnt/vol
 ~~~
-{: .code}
+{: .language-yaml}
 
 Submit and check this workflow with
 
@@ -265,7 +265,7 @@ spec:
         - mountPath: /mnt/data
           name: task-pv-storage
 ~~~
-{: .code}
+{: .language-yaml}
 
 Create the storage pod and copy the files from there
 
