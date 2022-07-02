@@ -24,9 +24,11 @@ keypoints:
 ## The `kubectl` command
 Kubernetes provides a kubectl for communicating with a Kubernetes cluster's control plane, using the Kubernetes API.
 Use the following syntax to run kubectl commands from your terminal window:
-~~~
+
+```shell
 kubectl [command] [TYPE] [NAME] [flags]
-~~~
+```
+
 where ```command ```, ```TYPE```, ```NAME```, and ```flags``` are:
 
 ```command:``` Specifies the operation that you want to perform on one or more resources, for example create, get, describe, delete.
@@ -34,21 +36,22 @@ where ```command ```, ```TYPE```, ```NAME```, and ```flags``` are:
 <br />```NAME:``` Specifies the name of the resource. 
 <br /> ```flags:```Specifies optional flags. 
 <br />
-<br />For installation instructions, see [Installing kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl); for a quick guide, see the [cheat sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/).
+<br />For installation instructions, see [Installing kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl); for a quick guide:
 
-Just as `gcloud` is the *one command to rule them all* for the GCP, the `kubectl` command is the main tool for interacting with your K8s cluster. You will use it to do essentially anything in the cluster. [Here](https://kubernetes.io/docs/reference/kubectl/cheatsheet/) is the official *cheatsheet*, which is very useful but already very long.
+* See the [cheat sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/).
+* The `kubectl` command is the main tool for interacting with your K8s cluster. You will use it to do essentially anything in the cluster. [Here](https://kubernetes.io/docs/reference/kubectl/cheatsheet/) is the official *cheatsheet*, which is very useful but already very long.
 
 Let's run a few examples.
 
 * Get the status of the nodes in your cluster:
 
-```
+```bash
 kubectl get nodes  
 ```
 
 * Get the cluster info:
 
-```
+```bash
 kubectl cluster-info  # Display addresses of the master and services
 ```
 
@@ -56,13 +59,13 @@ Let's list some kubernetes components:
 
 * Check pods
 
-```
+```bash
 kubectl get pod
 ```
 
 * Check the services
 
-```
+```bash
 kubectl get services
 ```
 
@@ -97,7 +100,7 @@ kubectl get deployment
 kubectl get pod
 ```
 
-# Argo
+## Argo
 
 Argo is a collection of open source tools that let us to extend the functions in Kubernetes. We can find some benefits from use argo.
 - Cloud agnostic service
@@ -126,7 +129,7 @@ While jobs can also be run manually, a workflow engine makes defining and submit
 
 Namespaces are a kind of reservations in your K8s cluster.  Let's create one for the Argo workflow we will user
 
-```
+```bash
 kubectl create ns <NAMESPACE>
 ```
 
