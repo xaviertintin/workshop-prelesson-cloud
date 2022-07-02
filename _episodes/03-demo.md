@@ -23,28 +23,22 @@ For the hands-on part of this lesson you will not have to create the cluster for
 * Get to the Console
 * Create a new project or select one of your interest (if you already have one)
 * Click on the Kubernetes engine/clusters section on the left side menu
-// ![](../fig/selectCluster.png)
 ![](../fig/SelectCluster.PNG)
 * Select create cluster (standard)
-![](../fig/selectCreate.png)
 ![](../fig/SelectCreate.PNG)
 * Select GKE Standard
-![](../fig/selectGKE.png)
 ![](../fig/SelectGKE.PNG)
 * Give it a name
-![](../fig/basicClusterName.png)
 ![](../fig/BasicClusterName.PNG)
 * Many ways to configure the cluster, but let's try an efficient one with autoscaling
 * Go to default pool
 * Choose size: 1 node
 * Autoscaling 0 to 4
-  ![](../fig/clusterDetails.png)
   ![](../fig/ClusterDetails.PNG)
 * Go to Nodes
 * Choose a machine e2-standar-4
 * Leave the rest as it is
 * Hit create
-![](../fig/machineConfig.png)
 ![](../fig/MachineConfig.PNG)
 * Creation will take while
 
@@ -63,18 +57,14 @@ The gcloud command-line interface is the primary CLI tool to create and manage G
 Once the cluster is ready (green check-mark should appear)
 
 * Click on the connect button of your cluster:
-![](../fig/connection.png)
 ![](../fig/Connection.PNG)
 * Execute that command in the cloud shell:
-![](../fig/commandline.png)
 ![](../fig/Commandline.PNG)
 
 * You’ve connected to your shell, now press enter to link to your GKE cluster:
-![](../fig/load.png)
 ![](../fig/Load.PNG)
 
 * Authorize Shell
-![](../fig/someCredentials.png)
 ![](../fig/SomeCredentials.PNG)
 
 
