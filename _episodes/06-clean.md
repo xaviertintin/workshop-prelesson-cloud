@@ -1,15 +1,16 @@
 ---
-title: "Demo: External IP"
-teaching: 0
+title: "Cleaning up"
+teaching: 5
 exercises: 10
 questions:
-- "What are the basic concepts and jargon I need to know?"
-- "Do do I manually create a K8s cluster on the GCP"
+- "How do I clean my workspace?"
+- "How do I delete my cluster?"
 objectives:
-- "Learn a few words and concepts that will be used during this lesson"
-- "Lear how to create a K8s cluster from scratch"
+- "Clean my workflows"
+- "Delete my storage volume"
 keypoints:
-- "It takes just a few clicks to create you own K8s cluster"
+- "Cleaning your workspace in periods of time while you're not running workflows will save you money."
+- "With a couple commands it is easy to get back to square one."
 ---
 
 
@@ -22,7 +23,7 @@ Run this until you get a message indicating there is no more workflows.
 argo delete -n argo @latest
 ```
 
-Delete namespace and delete all files
+Delete the argo namespace and all yaml files and configurations with:
 
 ```bash
 kubectl delete ns argo
@@ -30,15 +31,17 @@ rm *
 rm -r *
 ```
 
-Only delete your disk clame, if you used 
+Delete your disk:
 ```bash
-kubectl delete ns argo
-rm *
-rm -r *
+gcloud compute disks delete DISK_NAME [DISK_NAME …] [--region=REGION     | --zone=ZONE]
 ```
 
-Delete your disk
-```bash
-gcloud compute disks delete gce-nfs-disk-1 --zone=us-central1-c
-```
-
+> ## Demo delete disk
+>
+> To delete the disk 'gce-nfs-disk-1' in zone 'us-central1-c' that was used as an example in this workshop , run:
+>
+> ```bash
+> gcloud compute disks delete gce-nfs-disk-1 --zone=us-central1-c
+> ```
+>
+{: .testimonial}
