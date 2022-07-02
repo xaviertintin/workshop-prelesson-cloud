@@ -57,15 +57,16 @@ argo version
 We need to apply a small patch to the default argo config. Create a file called
 `patch-workflow-controller-configmap.yaml`:
 
-```yaml
+~~~
 data:
   artifactRepository: |
     archiveLogs: false
-```
+~~~
+{: .code}
 
 Apply:
 
-```shell
+```bash
 kubectl patch configmap workflow-controller-configmap -n argo --patch "$(cat patch-workflow-controller-configmap.yaml)"
 ```
 
@@ -102,10 +103,9 @@ argo delete -n argo @latest
 >
 > You can change the default namespace to `argo` as follows:
 >
-> ~~~
+> ```bash
 > kubectl config set-context --current --namespace=argo
-> ~~~
-> {: .bash}
+> ```
 >
 {: .testimonial}
 
@@ -119,27 +119,27 @@ You could create a disk clicking on the web interface above, but lets do it fast
 
 Create the volume (disk) we are going to use
 
-```
+```bash
 gcloud compute disks create --size=100GB --zone=us-central1-c gce-nfs-disk-1
 ```
 
 Set up an nfs server for this disk:
 
-```
+```bash
 wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/001-nfs-server.yaml
 kubectl apply -n argo -f 001-nfs-server.yaml
 ```
 
 Set up a nfs service, so we can access the server:
 
-```
+```bash
 wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/002-nfs-server-service.yaml
 kubectl apply -n argo -f 002-nfs-server-service.yaml
 ```
 
 Let's find out the IP of the nfs server:
 
-```
+```bash
 kubectl get -n argo svc nfs-server |grep ClusterIP | awk '{ print $3; }'
 ```
 
@@ -147,7 +147,7 @@ Let's create a *persisten volume* out of this nfs disk.  Note that persisten vol
 
 We need to write that IP number above into the appropriate place in this file:
 
-```
+```bash
 wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/003-pv.yaml
 ```
 
@@ -165,29 +165,29 @@ spec:
     server: <Add IP here>
     path: "/"
 ~~~
-{: .language-yaml}
+{: .code}
 
 Deploy:
 
-```
+```bash
 kubectl apply -f 003-pv.yaml
 ```
 
 Check:
 
-```
+```bash
 kubectl get pv
 ```
 
 Apps can claim persistent volumes through *persistent volume claims* (pvc).  Let's create a pvc:
 
-```
+```bash
 wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/003-pvc.yaml
 kubectl apply -n argo -f 003-pvc.yaml
 ```
 Check:
 
-```
+```bash
 kubectl get pvc -n argo
 ```
 
@@ -217,7 +217,7 @@ spec:
       - name: task-pv-storage
         mountPath: /mnt/vol
 ~~~
-{: .language-yaml}
+{: .code}
 
 Submit and check this workflow with
 
@@ -246,7 +246,7 @@ To copy the file from that volume to the cloud shell, we will define a container
 
 Create a file `pv-pod.yaml` with the following contents:
 
-```yaml
+~~~
 # pv-pod.yaml
 apiVersion: v1
 kind: Pod
@@ -264,7 +264,8 @@ spec:
       volumeMounts:
         - mountPath: /mnt/data
           name: task-pv-storage
-```
+~~~
+{: .code}
 
 Create the storage pod and copy the files from there
 
