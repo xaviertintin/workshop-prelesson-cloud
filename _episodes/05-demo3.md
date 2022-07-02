@@ -102,7 +102,7 @@ http-fileserver               LoadBalancer   10.8.7.24    <pending>     80:30539
 Wait a couple minutes recheck the previous command, copy your EXTERNAL-IP and paste it on a new tab, it should look something like this:
 
 ![](../fig/helloNFS.png)
-
+![](../fig/HelloNFS.PNG)
 The `<pending>` `EXTERNAL-IP` will update after a few minutes (run the command
 again to check). Once it's there, copy the IP and paste it into a new browser
 tab. This should welcome you with a "Hello from NFS" message. In order to
@@ -111,6 +111,7 @@ Determine the pod name using the first command listed below and adjust the
 second command accordingly.
 
 ![](../fig/index.png)
+![](../fig/Index.PNG)
 
 ```bash
 kubectl get pods -n argo
@@ -161,5 +162,6 @@ kubectl get svc -n argo
 * Click on Advanced, proceed to <ip>(unsafe) and voilà
   
 ![](../fig/argoInterface.png)
+![](../fig/ArgoInterface.PNG)
 
 {% include links.md %}
