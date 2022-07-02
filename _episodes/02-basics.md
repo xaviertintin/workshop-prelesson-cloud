@@ -134,29 +134,12 @@ Argo is a collection of open source tools that let us to extend the functions in
 - It’s possible correct debug errors.
 We are going to explain 3 of the tools most important for working with argo.
 
-### 1. Argo workflow
+### Argo as a workflow engine
+
 - Is used to execute complex job orchestration, including serial and parallel execution where each stage is executed like a container.
 - It is the most popular workflow execution engine for kubernetes.
 - You can run thousands of workflows a day, each with thousands of concurrent tasks.
 - Designed from the ground up for containers without the overhead and limitations of legacy VM and server-based environments. 
-
-### 2. Argo Events
-Argo events is an event-driven workflow automation framework for kubernetes. It allows you to trigger 10 different actions (such as the creation of Kubernetes objects, invoke workflows or serverless workloads) on over 20 different events (such as webhook, S3 drop, cron schedule, messaging queues - e.g. Kafka, GCP PubSub, SNS, SQS).
-Features
-Supports events from 20+ event sources and 10+ triggers.
-Ability to customize business-level constraint logic for workflow automation.
-Manage everything from simple, linear, real-time to complex, multi-source events.
-CloudEvents compliant.
-
-### 3. Argo CD
-It is a controller within Kubernetes that continuously monitors running applications and compares their current status. It allows you to define a set of CRDs (Custom Resource Definitions) unlike others, it only implements repository monitoring by pulling. This means that in a certain time it reads each previously configured repository and applies all changes made in any modification.
-##How to use ArgoCD?
-When we want to implement GitOps, we will use some tools:
-- minikube to have an environment with kubernetes on our machines.
-- You will install Gitlab as a repository manager and continuous integration tool. We will configure two repositories: the first will simulate our application, and the second will simulate the configuration repository.
-- Finally, install and configure ArgoCD on kubernetes for automatic deployment.
-
-## Argo as a workflow engine
 
 While jobs can also be run manually, a workflow engine makes defining and
 submitting jobs easier. In this tutorial, we use
@@ -165,40 +148,5 @@ Install it into your working environment with the following commands
 (all commands to be entered into the cloud shell):
 
 While jobs can also be run manually, a workflow engine makes defining and submitting jobs easier. In this tutorial, we use [argo quick start](https://argoproj.github.io/argo-workflows/quick-start/) page to install it:
-
-```
-kubectl create ns argo
-kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo-workflows/stable/manifests/quick-start-postgres.yaml
-```
-
-You can now check that argo is available with
-
-```bash
-argo version
-```
-
-We need to apply a small patch to the default argo config. Create a file called
-`patch-workflow-controller-configmap.yaml`:
-
-```yaml
-data:
-  artifactRepository: |
-    archiveLogs: false
-```
-
-Apply:
-
-```shell
-kubectl patch configmap workflow-controller-configmap -n argo --patch "$(cat patch-workflow-controller-configmap.yaml)"
-```
-
-Run a simple test flow:
-
-```
-argo submit -n argo --watch https://raw.githubusercontent.com/argoproj/argo-workflows/master/examples/hello-world.yaml
-argo list -n argo
-argo get -n argo @latest
-argo logs -n argo @latest
-```
 
 {% include links.md %}
