@@ -143,10 +143,9 @@ kubectl create ns <NAMESPACE>
 >
 > You can change the default namespace to `argo` as follows:
 >
-> ~~~
+> ```bash
 > kubectl config set-context --current --namespace=argo
-> ~~~
-> {: .bash}
+> ```
 >
 {: .testimonial}
 
