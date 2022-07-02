@@ -25,6 +25,7 @@ For the hands-on part of this lesson you will not have to create the cluster for
 * Click on the Kubernetes engine/clusters section on the left side menu
 ![](../fig/selectCluster.png)
 ![](../fig/SelectCluster.jpg)
+![](../fig/SelectCluster.png)
 * Select create cluster (standard)
 ![](../fig/selectCreate.png)
 * Select GKE Standard
