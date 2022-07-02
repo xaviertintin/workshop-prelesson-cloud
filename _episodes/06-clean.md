@@ -53,6 +53,7 @@ gcloud compute disks delete DISK_NAME [DISK_NAME …] [--region=REGION     | --z
 ![](../fig/Connection2.PNG)
 ![](../fig/Connection3.PNG)
 ![](../fig/Connection4.PNG)
+![](../fig/Connection6.PNG)
 
 * Confirm deletion:
 ![](../fig/DeleteCluster.PNG)
