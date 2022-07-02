@@ -59,4 +59,5 @@ gcloud compute disks delete DISK_NAME [DISK_NAME …] [--region=REGION     | --z
 ![](../fig/StartOver2.PNG)
 ![](../fig/StartOver3.PNG)
 ![](../fig/StartOver4.PNG)
+![](../fig/StartOver5.PNG)
 Perfect you’re ready to start over
