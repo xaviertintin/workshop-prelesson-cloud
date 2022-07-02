@@ -103,6 +103,7 @@ Wait a couple minutes recheck the previous command, copy your EXTERNAL-IP and pa
 
 ![](../fig/helloNFS.png)
 ![](../fig/HelloNFS.PNG)
+
 The `<pending>` `EXTERNAL-IP` will update after a few minutes (run the command
 again to check). Once it's there, copy the IP and paste it into a new browser
 tab. This should welcome you with a "Hello from NFS" message. In order to
