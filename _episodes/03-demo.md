@@ -56,7 +56,7 @@ The gcloud command-line interface is the primary CLI tool to create and manage G
 Once the cluster is ready (green check-mark should appear)
 
 * Click on the connect button of your cluster:
-![](../fig/Connection.PNG)
+![](../fig/Connection4.PNG)
 * Execute that command in the cloud shell:
 ![](../fig/Commandline.PNG)
 
