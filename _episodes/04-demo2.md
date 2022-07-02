@@ -82,7 +82,6 @@ argo logs -n argo @latest
 ```
 * Wait till the yellow light turns green
 * If argo was installed correctly you will have the following:
-![](../fig/helloWorld.png)
 ![](../fig/HelloWorld.PNG)
 
 Please mind that it is important to delete your workflows once they have
