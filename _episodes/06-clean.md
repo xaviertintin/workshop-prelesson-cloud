@@ -45,3 +45,16 @@ gcloud compute disks delete DISK_NAME [DISK_NAME …] [--region=REGION     | --z
 > ```
 >
 {: .testimonial}
+
+##Delete cluster
+
+* Click on the delete button of your cluster:
+![](../fig/Connection.PNG)
+
+* Confirm deletion:
+![](../fig/Connection.PNG)
+
+* Standby to see the complete deletion of the cluster:
+![](../fig/Connection.PNG)
+
+Perfect you’re ready to start over
