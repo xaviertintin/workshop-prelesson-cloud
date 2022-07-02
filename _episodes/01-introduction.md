@@ -1,12 +1,12 @@
 ---
 title: "Introduction"
 teaching: 10
-exercises: 15
+exercises: 0
 questions:
 - "What is Kubernetes?"
 - "What is a Kubernetes cluster and why do I need one?"
 - "What is Argo?"
-Objectives:
+objectives:
 - "Learn the very basics of Kubernetes"
 - "Learn a bit about the architecture of a Kubernetes cluster"
 - "Learn the very basics of Argo"
