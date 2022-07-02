@@ -18,27 +18,27 @@ keypoints:
 Remember to delete your workflow again to avoid additional charges:
 Run this until you get a message indicating there is no more workflows.
 
-```shell
+```bash
 argo delete -n argo @latest
 ```
 
 Delete namespace and delete all files
 
-```shell
+```bash
 kubectl delete ns argo
 rm *
 rm -r *
 ```
 
 Only delete your disk clame, if you used 
-```shell
+```bash
 kubectl delete ns argo
 rm *
 rm -r *
 ```
 
 Delete your disk
-```shell
+```bash
 gcloud compute disks delete gce-nfs-disk-1 --zone=us-central1-c
 ```
 
