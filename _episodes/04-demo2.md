@@ -1,15 +1,18 @@
 ---
-title: "Demo: Running other things"
+title: "Demo: Storing workflow output on Google Kubernetes Engine"
 teaching: 10
-exercises: 70
+exercises: 40
 questions:
-- "What are the basic concepts and jargon I need to know?"
-- "Do do I manually create a K8s cluster on the GCP"
+- "How to setup a workflow engine to submit jobs?"
+- "How to run a simple job?"
+- "How can I set up shared storage for my workflows?"
+- "How to run a simple job and get the the ouput?"
 objectives:
-- "Learn a few words and concepts that will be used during this lesson"
-- "Lear how to create a K8s cluster from scratch"
+- "Understand how to run a simple workflows in a commercial cloud environment"
+- "Understand how to set up shared storage and use it in a workflow"
 keypoints:
-- "It takes just a few clicks to create you own K8s cluster"
+- "With Kubernetes one can run workflows similar to a batch system"
+- "Open Data workflows can be run in a commercial cloud environment using modern tools"
 ---
 
 ## Install argo as a workflow engine
