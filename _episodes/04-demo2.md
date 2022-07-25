@@ -133,16 +133,16 @@ argo delete -n argo @latest
 ## Storage volumes
 
 
-<div id="kubernetes-run">
+<div id="kubernetes-run-2">
   <div>
         <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a data-os="GKE" href="#shell-gke" aria-controls="GKE" role="tab" data-toggle="tab">GKE</a></li>
-        <li role="presentation"><a data-os="minikube" href="#shell-minikube" aria-controls="Minikube" role="tab" data-toggle="tab">Minikube</a></li>
+        <li role="presentation" class="active"><a data-os="GKE" href="#shell-gke-2" aria-controls="GKE-2" role="tab" data-toggle="tab">GKE</a></li>
+        <li role="presentation"><a data-os="minikube-2" href="#shell-minikube-2" aria-controls="Minikube-2" role="tab" data-toggle="tab">Minikube</a></li>
         </ul>
 
         <div class="tab-content">
 
-            <article role="tabpanel" class="tab-pane active" id="shell-gke">
+            <article role="tabpanel" class="tab-pane active" id="shell-gke-2">
 
 <p>If we run some application or workflow, we usually require a disk space where to dump our results.  There is no persistent disk by default, we have to create it.</p>     
               
@@ -241,18 +241,18 @@ argo list -n argo
 <div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
 </code></pre></div></div>
 
-            </article><!-- gke  -->
+            </article><!-- gke-2  -->
 
-            <article role="tabpanel" class="tab-pane" id="shell-minikube">
+            <article role="tabpanel" class="tab-pane" id="shell-minikube-2">
 
 <p>If we run some application or workflow, we usually require a disk space where to dump our results.  There is no persistent disk by default, we have to create it.</p>     
               
 <p>You could create a disk clicking on the web interface above, but lets do it faster in the command line.</p>    
               
-              </article><!-- Minikube  -->
+              </article><!-- Minikube-2  -->
         </div> <!-- tab-contents  -->
     </div><!-- nav-tabs  -->
-</div><!-- kubernetes-run  -->
+</div><!-- kubernetes-run-2  -->
 
 
 
