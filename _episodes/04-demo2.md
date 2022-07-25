@@ -115,19 +115,8 @@ kubectl apply -n argo -f 002-nfs-server-service.yaml
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/003-pv.yaml
 </code></pre></div></div>               
               
-<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: nfs-1
-spec:
-  capacity:
-    storage: 100Gi
-  accessModes:
-    - ReadWriteMany
-  nfs:
-    server: <Add IP here>
-    path: <q>/</q>
-</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim 003-pv.yaml
+</code></pre></div></div>                   
               
 <p>Deploy:</p> 
   
