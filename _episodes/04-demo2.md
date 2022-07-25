@@ -81,7 +81,6 @@ easier.</p>
               
               </article><!-- Minikube  -->
         </div> <!-- tab-contents  -->
-
     </div><!-- nav-tabs  -->
 </div><!-- kubernetes-run  -->
 
@@ -156,29 +155,27 @@ argo delete -n argo @latest
               
 <p>Set up an nfs server for this disk:</p> 
               
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/001-nfs-server.yaml
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/001-nfs-server.yaml
 kubectl apply -n argo -f 001-nfs-server.yaml
 </code></pre></div></div> 
               
 <p>Set up a nfs service, so we can access the server:</p> 
               
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/002-nfs-server-service.yaml
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/002-nfs-server-service.yaml
 kubectl apply -n argo -f 002-nfs-server-service.yaml
 </code></pre></div></div> 
               
 <p>Let’s find out the IP of the nfs server:</p> 
               
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-kubectl get -n argo svc nfs-server |grep ClusterIP | awk '{ print $3; }'
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get -n argo svc nfs-server |grep ClusterIP | awk '{ print $3; }'
 </code></pre></div></div> 
               
 <p>Let’s create a persisten volume out of this nfs disk. Note that persisten volumes are not namespaced they are available to the whole cluster.</p> 
               
 <p>We need to write that IP number above into the appropriate place in this file:</p> 
               
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apiVersion: v1
+  
+<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: nfs-1
@@ -190,18 +187,17 @@ spec:
   nfs:
     server: <Add IP here>
     path: "/"
+    
 </code></pre></div></div>
               
 <p>Deploy:</p> 
   
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-kubectl apply -f 003-pv.yaml
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl apply -f 003-pv.yaml
 </code></pre></div></div> 
   
 <p>Check:</p> 
   
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-kubectl get pv
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pv
 </code></pre></div></div> 
   
 <p>Apps can claim persistent volumes through persistent volume claims (pvc). Let’s create a pvc:</p> 
@@ -213,14 +209,12 @@ kubectl apply -n argo -f 003-pvc.yaml
               
 <p>Check:</p> 
   
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-kubectl get pvc -n argo
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pvc -n argo
 </code></pre></div></div> 
   
 <p>Now an argo workflow coul claim and access this volume with a configuration like:</p> 
   
-<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-# argo-wf-volume.yaml
+<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code># argo-wf-volume.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
@@ -246,35 +240,28 @@ spec:
   
 <p>Submit and check this workflow with:</p> 
   
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-argo submit -n argo argo-wf-volume.yaml
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo submit -n argo argo-wf-volume.yaml
 argo list -n argo
 </code></pre></div></div> 
   
 <p>Take the name of the workflow from the output (replace XXXXX in the following command) and check the logs:</p> 
   
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-kubectl logs pod/test-hostpath-XXXXX  -n argo main
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl logs pod/test-hostpath-XXXXX  -n argo main
 </code></pre></div></div> 
   
 <p>Once the job is done, you will see something like:</p> 
   
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
+<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
 </code></pre></div></div>
 
             </article><!-- gke  -->
 
             <article role="tabpanel" class="tab-pane" id="shell-minikube">
 
-<p>Create the volume (disk) we are going to use:</p> 
+<p>Once the job is done, you will see something like:</p> 
               
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcloud compute disks create --size=100GB --zone=europe-west1-b gce-nfs-disk-1
-</code></pre></div></div> 
-              
-            </article><!-- Minikube  -->
+              </article><!-- Minikube  -->
         </div> <!-- tab-contents  -->
-
     </div><!-- nav-tabs  -->
 </div><!-- kubernetes-run  -->
 
