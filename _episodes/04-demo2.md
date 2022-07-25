@@ -60,7 +60,7 @@ easier.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo version
 </code></pre></div></div>
               
-<p>Run a simple test workflow</p>
+<h3>Run a simple test workflow</h3>
              
 <p>To test the setup, run a simple test workflow with</p>
 
