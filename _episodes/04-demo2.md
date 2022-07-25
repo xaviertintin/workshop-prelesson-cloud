@@ -80,7 +80,7 @@ Get the logs with</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo delete -n argo @latest
 </code></pre></div></div>                
 
-<p>Storage Volume</p>  
+<h3>Storage Volume</h3>  
               
 <p>If we run some application or workflow, we usually require a disk space where to dump our results.  There is no persistent disk by default, we have to create it.</p>     
               
@@ -181,7 +181,7 @@ argo list -n argo
 <div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
 </code></pre></div></div>
               
-<p>Get the output file</p> 
+<h3>Get the output file</h3> 
              
 <p>The example job above produced a text file as an output. It resides in the persistent volume that the workflow job has created. To copy the file from that volume to the cloud shell, we will define a container, a “storage pod” and mount the volume there so that we can get access to it.</p>  
               
@@ -233,7 +233,7 @@ easier.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo version
 </code></pre></div></div>
               
-<p>Run a simple test workflow</p>
+<h3>Run a simple test workflow</h3>
              
 <p>To test the setup, run a simple test workflow with</p>
 
@@ -253,7 +253,7 @@ Get the logs with</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo delete -n argo @latest
 </code></pre></div></div>                
 
-<p>Storage Volume</p>                
+<h3>Storage Volume</h3>                
               
 <p>If we run some application or workflow, we usually require a disk space where to dump our results. Unlike GKE, our local machine is the persistent disk by default. So let's create a persistent volume out of this nfs disk. Note that persisten volumes are not namespaced they are available to the whole cluster.</p>   
               
@@ -359,7 +359,7 @@ argo list -n argo
 ls -l /mnt/vol: total 4 -rw-rw-rw- 1 root root 18 Jul 25 05:51 test.txt
 </code></pre></div></div>
               
-<p>Get the output file</p> 
+<h3>Get the output file</h3> 
              
 <p>The example job above produced a text file as an output. It resides in the persistent volume that the workflow job has created. To copy the file from that volume to the cloud shell, we will define a container, a “storage pod” and mount the volume there so that we can get access to it.</p>  
               
