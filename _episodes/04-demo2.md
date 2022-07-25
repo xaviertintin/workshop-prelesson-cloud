@@ -183,9 +183,9 @@ kubectl apply -n argo -f 002-nfs-server-service.yaml
 </code></pre></div></div> 
   
 <p>Check:</p> 
-  
+      
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pv
-</code></pre></div></div> 
+</code></pre></div></div>
   
 <p>Apps can claim persistent volumes through persistent volume claims (pvc). Let’s create a pvc:</p> 
   
@@ -245,7 +245,9 @@ argo list -n argo
 
             <article role="tabpanel" class="tab-pane" id="shell-minikube">
 
-<p>Once the job is done, you will see something like:</p> 
+<p>If we run some application or workflow, we usually require a disk space where to dump our results.  There is no persistent disk by default, we have to create it.</p>     
+              
+<p>You could create a disk clicking on the web interface above, but lets do it faster in the command line.</p>    
               
               </article><!-- Minikube  -->
         </div> <!-- tab-contents  -->
