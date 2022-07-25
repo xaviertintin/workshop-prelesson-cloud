@@ -1,7 +1,7 @@
 ---
 title: "Demo: Storing workflow output on Google Kubernetes Engine"
-teaching: 10
-exercises: 40
+teaching: 5
+exercises: 30
 questions:
 - "How to setup a workflow engine to submit jobs?"
 - "How to run a simple job?"
@@ -15,6 +15,17 @@ keypoints:
 - "Open Data workflows can be run in a commercial cloud environment using modern tools"
 ---
 
+> ## Minikube
+> 
+> Keep in mind that [minikube](https://minikube.sigs.k8s.io/docs/start/) quickly sets up a single 
+> local Kubernetes cluster on macOS, Linux, and Windows. 
+> 
+> It is not possible to fetch yaml configuration files from your terminal, so omit the ```wget``` 
+> section of the commands and insert the following urls in your browser of preference to create the respective yaml file with 
+> its content, once saved in your local directory proceed to run the ```kubectl apply -n argo -f <example.yaml>``` commands.
+> 
+{: .testimonial}
+
 ## Install argo as a workflow engine
 
 While jobs can also be run manually, a workflow engine makes defining and
@@ -23,12 +34,21 @@ submitting jobs easier. In this tutorial, we use
 Install it into your working environment with the following commands
 (all commands to be entered into the cloud shell):
 
+
 ```bash
 kubectl create ns argo
 kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo-workflows/master/manifests/quick-start-postgres.yaml
+
+# Download the binary
 curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
+
+# Unzip
 gunzip argo-linux-amd64.gz
+
+# Make binary executable
 chmod +x argo-linux-amd64
+
+# Move binary to path
 sudo mv ./argo-linux-amd64 /usr/local/bin/argo
 ```
 
@@ -43,49 +63,29 @@ easier.
 >
 {: .callout}
 
-You need to execute the following command so that the argo workflow controller
-has sufficient rights to manage the workflow pods.
-Replace `XXX` with the number for the login credentials you received.
-
-```bash
-kubectl create clusterrolebinding cern-cms-cluster-admin-binding --clusterrole=cluster-admin --user=cms-gXXX@arkivum.com
-```
-
 You can now check that argo is available with
 
 ```bash
 argo version
 ```
 
-We need to apply a small patch to the default argo config. Create a file called
-`patch-workflow-controller-configmap.yaml`:
-
-~~~
-data:
-  artifactRepository: |
-    archiveLogs: false
-~~~
-{: .language-yaml}
-
-Apply:
-
-```bash
-kubectl patch configmap workflow-controller-configmap -n argo --patch "$(cat patch-workflow-controller-configmap.yaml)"
-```
-
 ## Run a simple test workflow
 
 To test the setup, run a simple test workflow with
 
-```bash
+```
 argo submit -n argo --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
-argo list -n argo
-argo get -n argo @latest
+```
+
+Wait till the yellow light turns green.
+Get the logs with
+
+```
 argo logs -n argo @latest
 ```
-* Wait till the yellow light turns green
+
 * If argo was installed correctly you will have the following:
-![](../fig/HelloWorld.PNG)
+![](../fig/HelloWorld.png)
 
 Please mind that it is important to delete your workflows once they have
 completed. If you do not do this, the pods associated with the workflow
@@ -123,20 +123,20 @@ You could create a disk clicking on the web interface above, but lets do it fast
 Create the volume (disk) we are going to use
 
 ```bash
-gcloud compute disks create --size=100GB --zone=us-central1-c gce-nfs-disk-1
+gcloud compute disks create --size=100GB --zone=europe-west1-b gce-nfs-disk-1
 ```
 
 Set up an nfs server for this disk:
 
 ```bash
-wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/001-nfs-server.yaml
+wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/001-nfs-server.yaml
 kubectl apply -n argo -f 001-nfs-server.yaml
 ```
 
 Set up a nfs service, so we can access the server:
 
 ```bash
-wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/002-nfs-server-service.yaml
+wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/002-nfs-server-service.yaml
 kubectl apply -n argo -f 002-nfs-server-service.yaml
 ```
 
@@ -151,7 +151,7 @@ Let's create a *persisten volume* out of this nfs disk.  Note that persisten vol
 We need to write that IP number above into the appropriate place in this file:
 
 ```bash
-wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/003-pv.yaml
+wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/003-pv.yaml
 ```
 
 ~~~
@@ -185,7 +185,7 @@ kubectl get pv
 Apps can claim persistent volumes through *persistent volume claims* (pvc).  Let's create a pvc:
 
 ```bash
-wget https://cms-opendata-workshop.github.io/workshop2021-lesson-cloud/files/003-pvc.yaml
+wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/003-pvc.yaml
 kubectl apply -n argo -f 003-pvc.yaml
 ```
 Check:
@@ -207,7 +207,7 @@ spec:
   volumes:
     - name: task-pv-storage
       persistentVolumeClaim:
-        claimName: nfs-<NUMBER>
+        claimName: nfs-1
   templates:
   - name: test-hostpath
     script:
@@ -260,7 +260,7 @@ spec:
   volumes:
     - name: task-pv-storage
       persistentVolumeClaim:
-        claimName: nfs-<NUMBER>
+        claimName: nfs-1
   containers:
     - name: pv-container
       image: busybox
@@ -279,4 +279,3 @@ kubectl cp  pv-pod:/mnt/data /tmp/poddata -n argo
 ```
 
 and you will get the file created by the job in `/tmp/poddata/test.txt`.
-
