@@ -257,6 +257,9 @@ Get the logs with</p>
               
 <p>If we run some application or workflow, we usually require a disk space where to dump our results. Unlike GKE, our local machine is the persistent disk by default. So let's create a persistent volume out of this nfs disk. Note that persisten volumes are not namespaced they are available to the whole cluster.</p>   
               
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano pv.yaml
+</code></pre></div></div>    
+              
 <div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -274,12 +277,20 @@ spec:
 ---
 </code></pre></div></div>   
               
+<p>Deploy:</p> 
+      
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl apply -f pv.yaml -n argo
+</code></pre></div></div>
+              
 <p>Check:</p> 
       
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pv
 </code></pre></div></div>
               
 <p>Apps can claim persistent volumes through persistent volume claims (pvc). Let’s create a pvc:</p>   
+              
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano pvc.yaml
+</code></pre></div></div>    
               
 <div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apiVersion: v1
 kind: PersistentVolumeClaim
@@ -293,7 +304,12 @@ spec:
     requests:
       storage: 3Gi
 </code></pre></div></div>  
-              
+   
+<p>Deploy:</p> 
+      
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl apply -f pvc.yaml -n argo
+</code></pre></div></div> 
+             
 <p>Check:</p> 
   
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pvc -n argo
@@ -339,7 +355,9 @@ argo list -n argo
   
 <p>Once the job is done, you will see something like:</p> 
   
-<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
+<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>time="2022-07-25T05:51:14.221Z" level=info msg="capturing logs" argo=true
+ls -l /mnt/vol: total 4 -rw-rw-rw- 1 root root 18 Jul 25 05:51 test.txt
+time="2022-07-25T05:51:15.251Z" level=info msg="sub-process exited" argo=true error="<nil>"
 </code></pre></div></div>
               
 <p>Get the output file</p> 
