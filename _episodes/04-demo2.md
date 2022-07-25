@@ -50,6 +50,10 @@ sudo mv ./argo-linux-amd64 /usr/local/bin/argo
 
 <p>This will also install the argo binary, which makes managing the workflows
 easier.</p>
+              
+<blockquote class="testimonial">
+  <p>In case you leave your computer, you might have to reconnect to the CloudShell again, and also on a different computer. If the <code class="language-plaintext highlighter-rouge">argo</code> command is not found, run the command above again starting from the <code class="language-plaintext highlighter-rouge">curl</code> command.</p>
+</blockquote>
 
 <p>You can now check that argo is available with:</p>
               
@@ -93,47 +97,6 @@ easier.</p>
     </div><!-- nav-tabs  -->
 </div><!-- kubernetes-run  -->
 
-
-While jobs can also be run manually, a workflow engine makes defining and
-submitting jobs easier. In this tutorial, we use
-[argo](https://argoproj.github.io/argo/quick-start/).
-Install it into your working environment with the following commands
-(all commands to be entered into the cloud shell):
-
-
-```bash
-kubectl create ns argo
-kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo-workflows/master/manifests/quick-start-postgres.yaml
-
-# Download the binary
-curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
-
-# Unzip
-gunzip argo-linux-amd64.gz
-
-# Make binary executable
-chmod +x argo-linux-amd64
-
-# Move binary to path
-sudo mv ./argo-linux-amd64 /usr/local/bin/argo
-```
-
-This will also install the argo binary, which makes managing the workflows
-easier.
-
-> ## Reconnecting after longer time away
->
-> In case you leave your computer, you might have to reconnect to the CloudShell
-> again, and also on a different computer. If the `argo` command is not found,
-> run the command above again starting from the `curl` command.
->
-{: .callout}
-
-You can now check that argo is available with
-
-```bash
-argo version
-```
 
 ## Run a simple test workflow
 
