@@ -1,5 +1,5 @@
 ---
-title: "Demo: Storing workflow output on Google Kubernetes Engine"
+title: "Demo: Storing a workflow output on Kubernetes"
 teaching: 5
 exercises: 30
 questions:
@@ -8,7 +8,7 @@ questions:
 - "How can I set up shared storage for my workflows?"
 - "How to run a simple job and get the the ouput?"
 objectives:
-- "Understand how to run a simple workflows in a commercial cloud environment"
+- "Understand how to run a simple workflows in a commercial cloud environment or local machine"
 - "Understand how to set up shared storage and use it in a workflow"
 keypoints:
 - "With Kubernetes one can run workflows similar to a batch system"
@@ -108,7 +108,7 @@ kubectl apply -n argo -f 002-nfs-server-service.yaml
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get -n argo svc nfs-server |grep ClusterIP | awk '{ print $3; }'
 </code></pre></div></div> 
               
-<p>Let’s create a persisten volume out of this nfs disk. Note that persisten volumes are not namespaced they are available to the whole cluster.</p> 
+<p>Let’s create a persistent volume out of this nfs disk. Note that persistent volumes are not namespaced they are available to the whole cluster.</p> 
               
 <p>We need to write that IP number above into the appropriate place in this file:</p> 
               
@@ -255,6 +255,125 @@ Get the logs with</p>
 
 <p>Storage Volume</p>                
               
+<p>If we run some application or workflow, we usually require a disk space where to dump our results. Unlike GKE, our local machine is the persistent disk by default. So let's create a persistent volume out of this nfs disk. Note that persisten volumes are not namespaced they are available to the whole cluster.</p>   
+              
+<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: task-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+---
+</code></pre></div></div>   
+              
+<p>Check:</p> 
+      
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pv
+</code></pre></div></div>
+              
+<p>Apps can claim persistent volumes through persistent volume claims (pvc). Let’s create a pvc:</p>   
+              
+<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: task-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+</code></pre></div></div>  
+              
+<p>Check:</p> 
+  
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pvc -n argo
+</code></pre></div></div> 
+              
+<p>Now an argo workflow coul claim and access this volume with a configuration like:</p> 
+              
+<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code># argo-wf-volume.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: test-hostpath-
+spec:
+  entrypoint: test-hostpath
+  volumes:
+    - name: workdir
+      hostPath:
+        path: /mnt/data
+        type: DirectoryOrCreate
+  templates:
+  - name: test-hostpath
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        echo "This is the ouput" > /mnt/vol/test.txt
+        echo ls -l /mnt/vol: `ls -l /mnt/vol`
+      volumeMounts:
+      - name: workdir
+        mountPath: /mnt/vol
+</code></pre></div></div>  
+              
+<p>Submit and check this workflow with:</p> 
+  
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo submit -n argo argo-wf-volume.yaml
+argo list -n argo
+</code></pre></div></div> 
+  
+<p>Take the name of the workflow from the output (replace XXXXX in the following command) and check the logs:</p> 
+  
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl logs pod/test-hostpath-XXXXX  -n argo main
+</code></pre></div></div> 
+  
+<p>Once the job is done, you will see something like:</p> 
+  
+<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
+</code></pre></div></div>
+              
+<p>Get the output file</p> 
+             
+<p>The example job above produced a text file as an output. It resides in the persistent volume that the workflow job has created. To copy the file from that volume to the cloud shell, we will define a container, a “storage pod” and mount the volume there so that we can get access to it.</p>  
+              
+<p>Create a file <code class="language-plaintext highlighter-rouge">pv-pod.yaml</code> with the following contents:</p>    
+              
+<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code># pv-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: task-pv-pod
+spec:
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+        claimName: task-pv-claim
+  containers:
+    - name: task-pv-container
+      image: busybox
+      command: ["tail", "-f", "/dev/null"]
+      volumeMounts:
+        - mountPath: /mnt/data
+          name: task-pv-storage
+</code></pre></div></div>              
+ 
+<p>Create the storage pod and copy the files from there</p>    
+              
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl apply -f pv-pod.yaml -n argo
+kubectl cp  task-pv-pod:/mnt/data /tmp/poddata -n argo
+</code></pre></div></div>
+              
+<p>and you will get the file created by the job in <code class="language-plaintext highlighter-rouge">/tmp/poddata/test.txt</code>.</p>    
               
               </article><!-- Minikube  -->
         </div> <!-- tab-contents  -->
