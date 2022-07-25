@@ -130,8 +130,7 @@ kubectl apply -n argo -f 002-nfs-server-service.yaml
   
 <p>Apps can claim persistent volumes through persistent volume claims (pvc). Let’s create a pvc:</p> 
   
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/003-pvc.yaml
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/003-pvc.yaml
 kubectl apply -n argo -f 003-pvc.yaml
 </code></pre></div></div> 
               
@@ -182,6 +181,38 @@ argo list -n argo
 <div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
 </code></pre></div></div>
               
+<p>Get the output file</p> 
+             
+<p>The example job above produced a text file as an output. It resides in the persistent volume that the workflow job has created. To copy the file from that volume to the cloud shell, we will define a container, a “storage pod” and mount the volume there so that we can get access to it.</p>  
+              
+<p>Create a file <code class="language-plaintext highlighter-rouge">pv-pod.yaml</code> with the following contents:</p>    
+              
+<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code># pv-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pv-pod
+spec:
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+        claimName: nfs-1
+  containers:
+    - name: pv-container
+      image: busybox
+      command: ["tail", "-f", "/dev/null"]
+      volumeMounts:
+        - mountPath: /mnt/data
+          name: task-pv-storage
+</code></pre></div></div>              
+ 
+<p>Create the storage pod and copy the files from there</p>    
+              
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl apply -f pv-pod.yaml -n argo
+kubectl cp  pv-pod:/mnt/data /tmp/poddata -n argo
+</code></pre></div></div>
+              
+<p>and you will get the file created by the job in <code class="language-plaintext highlighter-rouge">/tmp/poddata/test.txt</code>.</p>    
               
             </article><!-- gke  -->
 
