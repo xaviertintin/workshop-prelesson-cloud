@@ -233,6 +233,29 @@ easier.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo version
 </code></pre></div></div>
               
+<p>Run a simple test workflow</p>
+             
+<p>To test the setup, run a simple test workflow with</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo submit -n argo --watch https://raw.githubusercontent.com/argoproj/argo/master/examples/hello-world.yaml
+</code></pre></div></div>
+              
+<p>Wait till the yellow light turns green.
+Get the logs with</p>              
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo logs -n argo @latest
+</code></pre></div></div>              
+              
+<p>If argo was installed correctly you will have the following: IMAGE</p>      
+              
+<p>Please mind that it is important to delete your workflows once they have completed. If you do not do this, the pods associated with the workflow will remain scheduled in the cluster, which might lead to additional charges. You will learn how to automatically remove them later.</p>  
+              
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>argo delete -n argo @latest
+</code></pre></div></div>                
+
+<p>Storage Volume</p>                
+              
+              
               </article><!-- Minikube  -->
         </div> <!-- tab-contents  -->
     </div><!-- nav-tabs  -->
@@ -255,172 +278,3 @@ easier.</p>
 > ```
 >
 {: .testimonial}
-
-
-## Storage volumes
-
-
-
-If we run some application or workflow, we usually require a disk space where to dump our results.  There is no persistent disk by default, we have to create it.
-
-You could create a disk clicking on the web interface above, but lets do it faster in the command line.
-
-Create the volume (disk) we are going to use
-
-```bash
-gcloud compute disks create --size=100GB --zone=europe-west1-b gce-nfs-disk-1
-```
-
-Set up an nfs server for this disk:
-
-```bash
-wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/001-nfs-server.yaml
-kubectl apply -n argo -f 001-nfs-server.yaml
-```
-
-Set up a nfs service, so we can access the server:
-
-```bash
-wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/002-nfs-server-service.yaml
-kubectl apply -n argo -f 002-nfs-server-service.yaml
-```
-
-Let's find out the IP of the nfs server:
-
-```bash
-kubectl get -n argo svc nfs-server |grep ClusterIP | awk '{ print $3; }'
-```
-
-Let's create a *persisten volume* out of this nfs disk.  Note that persisten volumes are not namespaced they are available to the whole cluster.
-
-We need to write that IP number above into the appropriate place in this file:
-
-```bash
-wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/003-pv.yaml
-```
-
-~~~
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: nfs-1
-spec:
-  capacity:
-    storage: 100Gi
-  accessModes:
-    - ReadWriteMany
-  nfs:
-    server: <Add IP here>
-    path: "/"
-~~~
-{: .language-yaml}
-
-Deploy:
-
-```bash
-kubectl apply -f 003-pv.yaml
-```
-
-Check:
-
-```bash
-kubectl get pv
-```
-
-Apps can claim persistent volumes through *persistent volume claims* (pvc).  Let's create a pvc:
-
-```bash
-wget https://cms-opendata-workshop.github.io/workshop2022-lesson-introcloud/files/003-pvc.yaml
-kubectl apply -n argo -f 003-pvc.yaml
-```
-Check:
-
-```bash
-kubectl get pvc -n argo
-```
-
-Now an argo workflow coul claim and access this volume with a configuration like:
-
-~~~
-# argo-wf-volume.yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Workflow
-metadata:
-  generateName: test-hostpath-
-spec:
-  entrypoint: test-hostpath
-  volumes:
-    - name: task-pv-storage
-      persistentVolumeClaim:
-        claimName: nfs-1
-  templates:
-  - name: test-hostpath
-    script:
-      image: alpine:latest
-      command: [sh]
-      source: |
-        echo "This is the ouput" > /mnt/vol/test.txt
-        echo ls -l /mnt/vol: `ls -l /mnt/vol`
-      volumeMounts:
-      - name: task-pv-storage
-        mountPath: /mnt/vol
-~~~
-{: .language-yaml}
-
-Submit and check this workflow with
-
-```bash
-argo submit -n argo argo-wf-volume.yaml
-argo list -n argo
-```
-
-Take the name of the workflow from the output (replace XXXXX in the following command)
-and check the logs:
-
-```bash
-kubectl logs pod/test-hostpath-XXXXX  -n argo main
-```
-
-Once the job is done, you will see something like:
-
-~~~
-ls -l /mnt/vol: total 20 drwx------ 2 root root 16384 Sep 22 08:36 lost+found -rw-r--r-- 1 root root 18 Sep 22 08:36 test.txt
-~~~
-{: .output}
-
-## Get the output file
-
-The example job above produced a text file as an output. It resides in the persistent volume that the workflow job has created.
-To copy the file from that volume to the cloud shell, we will define a container, a "storage pod" and mount the volume there so that we can get access to it.
-
-Create a file `pv-pod.yaml` with the following contents:
-
-~~~
-# pv-pod.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pv-pod
-spec:
-  volumes:
-    - name: task-pv-storage
-      persistentVolumeClaim:
-        claimName: nfs-1
-  containers:
-    - name: pv-container
-      image: busybox
-      command: ["tail", "-f", "/dev/null"]
-      volumeMounts:
-        - mountPath: /mnt/data
-          name: task-pv-storage
-~~~
-{: .language-yaml}
-
-Create the storage pod and copy the files from there
-
-```bash
-kubectl apply -f pv-pod.yaml -n argo
-kubectl cp  pv-pod:/mnt/data /tmp/poddata -n argo
-```
-
-and you will get the file created by the job in `/tmp/poddata/test.txt`.
