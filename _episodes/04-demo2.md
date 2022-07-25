@@ -357,7 +357,6 @@ argo list -n argo
   
 <div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>time="2022-07-25T05:51:14.221Z" level=info msg="capturing logs" argo=true
 ls -l /mnt/vol: total 4 -rw-rw-rw- 1 root root 18 Jul 25 05:51 test.txt
-time="2022-07-25T05:51:15.251Z" level=info msg="sub-process exited" argo=true error="<nil>"
 </code></pre></div></div>
               
 <p>Get the output file</p> 
