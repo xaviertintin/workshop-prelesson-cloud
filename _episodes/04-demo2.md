@@ -178,8 +178,7 @@ kubectl get -n argo svc nfs-server |grep ClusterIP | awk '{ print $3; }'
               
 <p>We need to write that IP number above into the appropriate place in this file:</p> 
               
-<div class="language-code highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-apiVersion: v1
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: nfs-1
@@ -191,7 +190,7 @@ spec:
   nfs:
     server: <Add IP here>
     path: "/"
-</code></pre></div></div> 
+</code></pre></div></div>
               
 <p>Deploy:</p> 
   
